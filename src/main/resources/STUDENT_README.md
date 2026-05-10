@@ -1,66 +1,34 @@
-# Assignment 4: MonastArray - Student Reflection
+# MonastArray - How It All Works
 
-## Program Overview
+## What I Built
 
-This program recreates the core functionality of Java's `ArrayList` using a plain Java array as the underlying storage mechanism. The assignment demonstrates fundamental data structure concepts including dynamic array resizing, element shifting, and efficient memory management.
+I created my own version of ArrayList from scratch using a regular Java array. The main idea is that when you keep adding items to an array that's full, you need to create a bigger array and copy everything over. That's basically what ArrayList does behind the scenes.
 
-## How It Works
+## The Main Classes
 
-### Key Components
+**ShoppingItem** stores a product with its name, price in pennies, and whether it's been bought. Pretty straightforward.
 
-1. **ShoppingItem** - Represents a product with name, price (in pennies), and sold status
-2. **ShoppingList** - Custom ArrayList implementation storing ShoppingItem objects
-3. **ShoppingCart** - Represents a customer's shopping cart with completion tracking
-4. **Main** - Demonstrates all functionality with a realistic shopping scenario
+**ShoppingList** is where the real work happens. It holds ShoppingItems in an array and manages the whole growing/shrinking process.
 
-### Array Resizing Logic
+**ShoppingCart** just tracks a customer's list and whether they've bought everything. It also keeps a running count of how many carts have been successfully returned.
 
-The `makeCapacity(int minCapacity)` method is the heart of this implementation:
-- When the list is full and needs more space, we create a new array with double the capacity
-- All existing elements are copied to the new array
-- The old array is discarded (garbage collected)
-- This ensures O(1) amortized time complexity for append operations
+**Main** sets up two shopping lists with different items and demonstrates that add, insert, and remove all work correctly.
 
-### Element Shifting
+## How the Array Resizing Works
 
-**insertAt()**: When inserting at an index, all elements from that index onwards are shifted right:
-```
-Before: [A, C] -> insert B at index 1
-Shift:  [A, C, ?] -> shift C right
-After:  [A, B, C]
-```
+When the storage array gets full, `makeCapacity()` creates a new array that's twice as big, copies all the old items into it, then switches over to using the new one. The minimum size is always 8, so even an empty list takes up some space. This strategy means you don't have to resize after every single add, which keeps things efficient.
 
-**removeAt()**: When removing, all elements after the index shift left:
-```
-Before: [A, B, C] -> remove B at index 1
-Shift:  [A, C, ?] -> shift C left
-After:  [A, C]
-```
+## Inserting and Removing Items
 
-### Shopping Logic
+When you insert at a specific position, everything from that position onward shifts to the right to make space. When you remove something, everything after it shifts left to fill the gap. Both operations take O(n) time in the worst case because of the shifting, but that's just how it has to work with arrays.
 
-- **goShopping()**: Marks all items in the list as bought
-- **goShopping(ShoppingList)**: Buys only items that appear in both lists (intersection)
-- **isIdentical()**: Checks if two lists contain the same items (order-independent)
+## The Shopping Features
 
-## Design Decisions
+I implemented three main shopping operations:
+- Buy everything in a list at once with `goShopping()`
+- Buy only items that appear in both lists using `goShopping(ShoppingList)`
+- Check if two lists contain the same items regardless of order with `isIdentical()`
 
-1. **Minimum Capacity**: Capacity never drops below 8, ensuring reasonable storage even for empty lists
-2. **Null Safety**: Added null checks in shopping methods to handle edge cases
-3. **Double Resizing**: Doubling capacity when full provides good balance between memory efficiency and performance
-4. **Constructor Overloading**: ShoppingCart supports both empty and pre-populated initialization
+## What I Learned
 
-## Challenges & Solutions
-
-1. **Character Encoding**: Removed emoji characters from comments to ensure US-ASCII compatibility
-2. **Array Index Management**: Carefully tracked size vs capacity to avoid off-by-one errors
-3. **Method Signature Matching**: Ensured constructor parameters matched test expectations
-4. **List Comparison**: Implemented order-independent comparison by tracking matched items
-
-## Compliance with Rubric
-
-- All required methods implemented per specification
-- Proper error messages printed for invalid indices
-- Array resizing demonstrated through capacity management
-- Shopping scenario fully implemented in Main
-- Clear separation of concerns among classes
+Building this from scratch really shows why ArrayList is useful. Managing the array size manually is tedious, but understanding what's happening under the hood makes you appreciate the abstraction. The trickiest part was making sure the resizing logic didn't have any off-by-one errors, and getting all the null checks in the right places so nothing breaks unexpectedly.
