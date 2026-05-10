@@ -2,7 +2,7 @@
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import apcsa.githubtrack*;
+import apcsa.githubtrack.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
