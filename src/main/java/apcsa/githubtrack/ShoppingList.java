@@ -1,5 +1,4 @@
 package apcsa.githubtrack;
-import apcsa.githubtrack.ShoppingItem;
 
 public class ShoppingList implements MyList {
     private int capacity;
@@ -47,7 +46,7 @@ public class ShoppingList implements MyList {
         this.size--;
     }
 
-    public Object getAt(int index) {
+    public ShoppingItem getAt(int index) {
         if (index < 0 || index >= this.size) {
             System.out.println("Invalid index!");
             return null;
